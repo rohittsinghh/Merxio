@@ -176,3 +176,57 @@ leaked, attackers still cannot directly use the stored refresh token values.
 Users can have many roles, and roles can have many permissions. The join tables
 `user_roles` and `role_permissions` keep this normalized and flexible. Adding a
 new permission later does not require changing the users table.
+
+## Module 2: User Profile And Addresses
+
+User profile and address management builds on authentication. Every endpoint in
+this module requires a valid access token and operates only on the current user.
+
+Implemented endpoints:
+
+- `PATCH /api/v1/users/me`
+- `GET /api/v1/users/me/addresses`
+- `POST /api/v1/users/me/addresses`
+- `PUT /api/v1/users/me/addresses/{address_id}`
+- `DELETE /api/v1/users/me/addresses/{address_id}`
+
+### Why Addresses Are Separate From Users
+
+A user can have multiple addresses, and those addresses can serve different
+purposes such as shipping or billing. Keeping addresses in their own table avoids
+duplicating user rows and prepares the system for checkout and order history.
+
+### Default Address Rule
+
+The service layer enforces one default address per user and address type. If a
+new default shipping address is added, older shipping defaults for that user are
+unset in the same transaction.
+
+## Module 3: Category And Product Catalog
+
+The catalog module introduces categories, products, and product images. Catalog
+read endpoints are public, while create/update endpoints require authentication
+so products can be tied to the current seller user.
+
+Implemented endpoints:
+
+- `GET /api/v1/categories`
+- `POST /api/v1/categories`
+- `PUT /api/v1/categories/{category_id}`
+- `GET /api/v1/products`
+- `GET /api/v1/products/{product_id}`
+- `POST /api/v1/products`
+- `PUT /api/v1/products/{product_id}`
+
+### Why Inventory Is Not In Product Yet
+
+Products describe what is being sold. Inventory describes how much stock exists
+and how it changes. Keeping those separate prepares the system for reservations,
+stock movements, and checkout transactions in the inventory module.
+
+### Catalog Query Features
+
+The product list endpoint supports search, category filtering, seller filtering,
+active-only filtering, sorting, limit, and offset pagination. These features are
+implemented in the repository layer because they translate directly to SQL query
+construction.

@@ -10,6 +10,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.base import Base
 
 if TYPE_CHECKING:
+    from app.models.address import Address
+    from app.models.product import Product
     from app.models.refresh_token import RefreshToken
     from app.models.user_role import UserRole
 
@@ -50,6 +52,11 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+    addresses: Mapped[list[Address]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+    products: Mapped[list[Product]] = relationship(back_populates="seller")
 
 
 Index("ix_users_email_lower", func.lower(User.email), unique=True)

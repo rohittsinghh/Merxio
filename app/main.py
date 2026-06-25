@@ -5,7 +5,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.routers.auth import router as auth_router
+from app.api.v1.routers.catalog import router as catalog_router
 from app.api.v1.routers.health import router as health_router
+from app.api.v1.routers.user import router as user_router
 from app.core.config import settings
 from app.core.exceptions import register_exception_handlers
 from app.core.logging import configure_logging, get_logger
@@ -51,6 +53,8 @@ def create_app() -> FastAPI:
     # Cross-cutting behavior is registered once at the application boundary.
     register_exception_handlers(app)
     app.include_router(auth_router, prefix="/api/v1")
+    app.include_router(catalog_router, prefix="/api/v1")
+    app.include_router(user_router, prefix="/api/v1")
     app.include_router(health_router, prefix="/api/v1", tags=["health"])
     return app
 
