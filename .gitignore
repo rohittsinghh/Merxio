@@ -1,12 +1,48 @@
+# Environment and secrets
 .env
+.env.*
+!.env.example
+
+# Python runtime and virtual environments
 .venv/
+venv/
+env/
 __pycache__/
 *.py[cod]
 *.egg-info/
+.mypy_cache/
+.pyre/
+.tox/
+.nox/
+
+# Tool caches and reports
 .pytest_cache/
 .ruff_cache/
 .coverage
+coverage.xml
 htmlcov/
+
+# Build and package output
 dist/
 build/
+site/
+
+# Logs and temporary files
+*.log
 logs/*.log
+tmp/
+temp/
+
+# Docker and local service volumes
+.docker/
+docker-data/
+postgres_data/
+redis_data/
+rabbitmq_data/
+
+# Editor and OS metadata
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
